@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Orange Money · Transfer Confirmed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --om-primary:   #FF7900;
+    --om-primary-dark: #E55A00;
+    --om-royal:     #FF9D2E;
+    --om-navy:      #0F1A2B;
+    --om-soft-orange:#FFF4EB;
+    --om-soft:      #F7F8FA;
+    --om-border:    #E8EAEE;
+    --om-text:      #1A2233;
+    --om-muted:     #5B6577;
+    --om-white:     #FFFFFF;
+    --om-page:      #F5F6F8;
+    --om-green:     #0E7A4A;
+    --om-green-soft:#E8F5EE;
+    --om-gold:      #FFB81C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--om-page); color: var(--om-text);
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+    min-height: 100vh; display: flex; justify-content: center; padding: 0;
+  }
+  .phone {
+    width: 100%; max-width: 430px; min-height: 100vh;
+    background: var(--om-white); display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+
+  /* ─── TOOLBAR — logo + text ─── */
+  .toolbar {
+    flex-shrink: 0; background: var(--om-white);
+    padding: max(14px, env(safe-area-inset-top, 0px)) 16px 14px;
+    border-bottom: 1px solid var(--om-border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; z-index: 30;
+  }
+  .toolbar-brand {
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0;
+  }
+  .toolbar-logo { height: 30px; width: auto; display: block; flex-shrink: 0; }
+  .toolbar-brand-text {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.4px;
+    color: var(--om-primary); line-height: 1; white-space: nowrap;
+  }
+  .toolbar-brand-text .dot { color: var(--om-navy); }
+
+  .toolbar-actions { display: flex; gap: 8px; }
+  .tool-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 12px; font-size: 12px; font-weight: 600;
+    border-radius: 8px; font-family: inherit; cursor: pointer;
+    transition: all .15s; border: 1px solid var(--om-border);
+    background: var(--om-white); color: var(--om-primary);
+  }
+  .tool-btn:hover { border-color: var(--om-primary); background: var(--om-soft-orange); }
+  .tool-btn.copied { background: var(--om-green); border-color: var(--om-green); color: #fff; }
+  .tool-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* ─── TOP HERO — SUCCESS ─── */
+  .top {
+    position: relative; flex-shrink: 0;
+    background: linear-gradient(160deg, var(--om-primary) 0%, var(--om-royal) 100%);
+    padding: 24px 22px 30px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+  }
+  .top::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--om-gold);
+    border-top-left-radius: 20px; border-top-right-radius: 20px;
+  }
+  .success-check {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: rgba(255,255,255,0.20);
+    border: 3px solid rgba(255,255,255,0.85);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    animation: popIn .5s cubic-bezier(.4, 1.4, .6, 1);
+  }
+  .success-check svg {
+    width: 44px; height: 44px;
+    stroke: #fff; fill: none;
+    stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 60; stroke-dashoffset: 60;
+    animation: drawCheck .55s ease-out .15s forwards;
+  }
+  @keyframes popIn {
+    0%   { transform: scale(0.4); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+  }
+  .success-title {
+    font-size: 22px; font-weight: 800;
+    color: #FFFFFF; letter-spacing: -0.4px; line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .success-sub {
+    font-size: 13px; color: rgba(255,255,255,0.88);
+    line-height: 1.55; max-width: 320px; margin: 0 auto;
+  }
+  .credited-amount {
+    font-size: 32px; font-weight: 900; color: var(--om-gold);
+    letter-spacing: -0.8px; margin-top: 14px;
+    line-height: 1.1; word-break: break-word;
+  }
+
+  /* ─── BODY ─── */
+  .body {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 24px 20px 26px;
+    display: flex; flex-direction: column;
+  }
+
+  .status-desc {
+    font-size: 13px; color: var(--om-muted); line-height: 1.6;
+    text-align: center; max-width: 320px; margin: 0 auto 24px;
+  }
+
+  /* Recipient */
+  .recipient-section { margin-bottom: 22px; }
+  .recipient-label-row {
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.7px;
+    text-transform: uppercase; color: var(--om-muted);
+    margin-bottom: 10px;
+  }
+  .recipient-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 14px 16px;
+    background: var(--om-soft); border-radius: 10px;
+    border: 1px solid var(--om-border);
+    margin-bottom: 8px;
+  }
+  .recipient-row:last-child { margin-bottom: 0; }
+  .recipient-row .k {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--om-muted); flex-shrink: 0;
+  }
+  .recipient-row .v {
+    font-weight: 700; color: var(--om-text);
+    font-size: 14px; text-align: right; word-break: break-word;
+  }
+
+  /* Details panel */
+  .details-panel {
+    width: 100%; margin-bottom: 24px;
+    background: var(--om-white); border-radius: 14px;
+    border: 1px solid var(--om-border);
+    overflow: hidden;
+  }
+  .details-panel .panel-title {
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.7px;
+    text-transform: uppercase; color: var(--om-muted);
+    padding: 14px 20px 10px;
+    background: var(--om-soft);
+    border-bottom: 1px solid var(--om-border);
+  }
+  .details-panel .panel-body { padding: 4px 20px 8px; }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; padding: 13px 0;
+    border-bottom: 1px solid var(--om-border);
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .k { font-size: 12px; color: var(--om-muted); flex-shrink: 0; font-weight: 500; }
+  .detail-row .v {
+    font-size: 13px; font-weight: 700; text-align: right;
+    word-break: break-word; color: var(--om-text);
+  }
+  .detail-row.purpose-row .k { color: var(--om-primary-dark); }
+  .detail-row.purpose-row .v { color: var(--om-navy); font-weight: 800; }
+  .detail-row .v.mono {
+    font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+    font-size: 11.5px; letter-spacing: 0.3px;
+    background: #fff; padding: 3px 8px; border-radius: 5px;
+    border: 1px solid var(--om-border);
+  }
+  .detail-row .v.status-done { color: var(--om-green); font-weight: 800; }
+
+  /* Footer */
+  .om-footer {
+    width: 100%;
+    background: var(--om-navy);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; text-align: left;
+  }
+  .foot-brand-row { display: flex; align-items: center; gap: 8px; }
+  .om-footer .foot-logo {
+    height: 26px; width: auto; display: block; flex-shrink: 0;
+  }
+  .om-footer .foot-brand-text {
+    font-size: 16px; font-weight: 800; letter-spacing: -0.3px;
+    color: #fff; line-height: 1; white-space: nowrap;
+  }
+  .om-footer .foot-brand-text .dot { color: var(--om-primary); }
+  .om-footer .foot-support {
+    font-size: 10.5px; color: rgba(255,255,255,0.72); line-height: 1.5; font-weight: 500;
+    text-align: right;
+  }
+  .om-footer .foot-support strong {
+    color: var(--om-primary); font-weight: 700; font-size: 11.5px;
+  }
+
+  /* Close button */
+  .close-btn {
+    width: 100%; margin-top: 18px; min-height: 64px;
+    background: var(--om-primary); color: #fff;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-size: 17px; font-weight: 800;
+    letter-spacing: 0.4px; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(255,121,0,0.28);
+    transition: filter .15s, transform .1s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 18px 24px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .close-btn:hover { filter: brightness(1.06); }
+  .close-btn:active { transform: scale(0.985); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--om-navy); color: #fff; padding: 11px 18px; border-radius: 9px;
+    font-size: 12.5px; font-weight: 600; opacity: 0; transition: all .3s ease;
+    z-index: 50; pointer-events: none; max-width: 90%; text-align: center;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Responsive */
+  @media (max-width: 380px) {
+    .toolbar-logo { height: 26px; }
+    .toolbar-brand-text { font-size: 16px; }
+    .tool-btn { padding: 7px 10px; font-size: 11px; }
+    .top { padding: 20px 18px 24px; }
+    .success-check { width: 74px; height: 74px; }
+    .success-check svg { width: 36px; height: 36px; }
+    .success-title { font-size: 19px; }
+    .credited-amount { font-size: 26px; }
+    .body { padding: 20px 18px 20px; }
+    .recipient-row { padding: 12px 14px; }
+    .recipient-row .v { font-size: 13px; }
+    .details-panel .panel-title { padding: 12px 16px 8px; }
+    .details-panel .panel-body { padding: 4px 16px 8px; }
+    .detail-row { padding: 12px 0; }
+    .detail-row .k { font-size: 11.5px; }
+    .detail-row .v { font-size: 12.5px; }
+    .om-footer { padding: 14px 16px; }
+    .om-footer .foot-logo { height: 22px; }
+    .om-footer .foot-brand-text { font-size: 14px; }
+    .close-btn { min-height: 60px; font-size: 16px; }
+  }
+  @media (min-width: 640px) {
+    body { padding: 32px 0; align-items: center; }
+    .phone {
+      min-height: calc(100vh - 64px); max-height: 900px;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(255,121,0,0.18);
+      overflow: hidden;
+    }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .toolbar, .close-btn, .om-footer { display: none !important; }
+    .phone { box-shadow: none; }
+    .top { background: #fff; border-bottom: 1px solid #ccc; }
+    .success-title { color: var(--om-primary); }
+    .success-sub { color: var(--om-muted); }
+    .credited-amount { color: var(--om-primary); }
+    .success-check { border-color: var(--om-green); background: var(--om-green-soft); }
+    .success-check svg { stroke: var(--om-green); }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-brand">
+      <img
+        class="toolbar-logo"
+        src="https://cdn.brandfetch.io/id29r8rnyj/theme/light/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+        alt="Orange Money"
+        referrerpolicy="no-referrer"
+        onerror="this.style.display='none'"
+      >
+      <span class="toolbar-brand-text">Orange<span class="dot">.</span></span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="tool-btn" id="copyBtn" onclick="copyReceipt()">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="copyLbl">Copy</span>
+      </button>
+      <button class="tool-btn" onclick="window.print()">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span id="printLbl">Print</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TOP HERO -->
+  <div class="top">
+    <div class="success-check">
+      <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg>
+    </div>
+    <div class="success-title" id="successTitle">Transfer confirmed</div>
+    <div class="success-sub" id="successSub">Your incoming transfer has been confirmed and the funds are now in your Orange Money account.</div>
+    <div class="credited-amount" id="creditedAmount">—</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <div class="status-desc" id="statusDesc">
+      The amount has been credited to your Orange Money account. You may close this page — no further action is needed.
+    </div>
+
+    <div class="recipient-section">
+      <div class="recipient-label-row" id="recipientHeading">Recipient Details</div>
+      <div class="recipient-row">
+        <span class="k" id="fromLabel">From</span>
+        <span class="v" id="fromName">—</span>
+      </div>
+      <div class="recipient-row">
+        <span class="k" id="toLabel">To</span>
+        <span class="v" id="reqRecipient">—</span>
+      </div>
+    </div>
+
+    <div class="details-panel">
+      <div class="panel-title" id="detailsHeading">Transaction Details</div>
+      <div class="panel-body" id="detailsPanel"></div>
+    </div>
+
+    <div class="om-footer">
+      <div class="foot-brand-row">
+        <img
+          class="foot-logo"
+          src="https://cdn.brandfetch.io/id29r8rnyj/theme/light/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B"
+          alt="Orange Money"
+          referrerpolicy="no-referrer"
+          onerror="this.style.display='none'"
+        >
+        <span class="foot-brand-text">Orange<span class="dot">.</span></span>
+      </div>
+      <div class="foot-support">
+        <span id="helpLabel">Customer Care</span><br>
+        <span id="callLabel">Call</span> <strong id="supportNum">—</strong>
+      </div>
+    </div>
+
+    <button class="close-btn" onclick="closePage()" id="closeBtn">Done</button>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const I18N = {
+    en: {
+      docTitle: 'Orange Money · Transfer Confirmed',
+      successTitle: 'Transfer confirmed',
+      successSub: 'Your incoming transfer has been confirmed and the funds are now in your Orange Money account.',
+      statusDesc: 'The amount has been credited to your Orange Money account. You may close this page — no further action is needed.',
+      fromLabel: 'From',
+      toLabel: 'To',
+      recipientHeading: 'Recipient Details',
+      detailsHeading: 'Transaction Details',
+      needHelp: 'Customer Care',
+      callLabel: 'Call',
+      copyLbl: 'Copy',
+      printLbl: 'Print',
+      copied: 'Copied ✓',
+      copyToast: 'Receipt copied to clipboard.',
+      copyReceiptTitle: 'Orange Money — Transfer Confirmed',
+      done: 'Done',
+      kCountry: 'Country',
+      kPaymentMethod: 'Payment method',
+      kService: 'Service',
+      kReference: 'Reference',
+      kTransactionDate: 'Date',
+      kStatus: 'Status',
+      vCredited: 'Credited to account',
+      purposeLabel: 'Purpose'
+    },
+    fr: {
+      docTitle: 'Orange Money · Virement confirmé',
+      successTitle: 'Virement confirmé',
+      successSub: 'Votre virement entrant a été confirmé et les fonds sont maintenant sur votre compte Orange Money.',
+      statusDesc: 'Le montant a été crédité sur votre compte Orange Money. Vous pouvez fermer cette page — aucune action supplémentaire n\'est requise.',
+      fromLabel: 'De',
+      toLabel: 'À',
+      recipientHeading: 'Détails du destinataire',
+      detailsHeading: 'Détails de la transaction',
+      needHelp: 'Service Client',
+      callLabel: 'Appelez le',
+      copyLbl: 'Copier',
+      printLbl: 'Imprimer',
+      copied: 'Copié ✓',
+      copyToast: 'Reçu copié dans le presse-papiers.',
+      copyReceiptTitle: 'Orange Money — Virement confirmé',
+      done: 'Terminé',
+      kCountry: 'Pays',
+      kPaymentMethod: 'Mode de paiement',
+      kService: 'Service',
+      kReference: 'Référence',
+      kTransactionDate: 'Date',
+      kStatus: 'Statut',
+      vCredited: 'Crédité sur le compte',
+      purposeLabel: 'Motif'
+    }
+  };
+
+  const urlParams = new URLSearchParams(location.search);
+  const urlLang = (urlParams.get('lang') || '').toLowerCase();
+  const currentLang = I18N[urlLang] ? urlLang : 'en';
+  const T = I18N[currentLang];
+
+  const tx = {
+    ref: urlParams.get('tx') || '',
+    am:  urlParams.get('am') || '',
+    cur: urlParams.get('cur') || '',
+    rn:  urlParams.get('rn') || '',
+    c:   urlParams.get('c') || '',
+    pm:  urlParams.get('pm') || '',
+    sn:  urlParams.get('sn') || '',
+    mk:  urlParams.get('mk') || '',
+    an:  urlParams.get('an') || '',
+    dt:  urlParams.get('dt') || '',
+    pu:  urlParams.get('pu') || ''
+  };
+
+  const SUPPORT_NUMBERS = {
+    'Botswana': '1234',
+    'Botswana (Orange)': '1234',
+    'Cameroon': '8787',
+    'Zambia': '111',
+    'Uganda': '100',
+    'Ghana': '100',
+    'Benin': '111'
+  };
+
+  const CURRENCY_LOCALE = {
+    BWP: 'en-BW', ZAR: 'en-ZA', USD: 'en-US', EUR: 'en-EU',
+    XAF: 'fr-CM', ZMW: 'en-ZM', UGX: 'en-UG', GHS: 'en-GH',
+    XOF: 'fr-BJ'
+  };
+
+  function formatAmount(amount, currency) {
+    const locale = CURRENCY_LOCALE[currency] || 'en-BW';
+    const n = Number(amount);
+    if (!isFinite(n)) return '—';
+    try {
+      const parts = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0, maximumFractionDigits: 2
+      }).format(n);
+      return parts + ' ' + currency;
+    } catch (e) { return n + ' ' + (currency || ''); }
+  }
+
+  function formatDate(ts) {
+    const d = ts ? new Date(ts) : new Date();
+    const locale = currentLang === 'fr' ? 'fr-FR' : undefined;
+    return d.toLocaleString(locale, {
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function applyTranslations() {
+    document.title = T.docTitle;
+    document.getElementById('copyLbl').textContent = T.copyLbl;
+    document.getElementById('printLbl').textContent = T.printLbl;
+    document.getElementById('successTitle').textContent = T.successTitle;
+    document.getElementById('successSub').textContent = T.successSub;
+    document.getElementById('statusDesc').textContent = T.statusDesc;
+    document.getElementById('fromLabel').textContent = T.fromLabel;
+    document.getElementById('toLabel').textContent = T.toLabel;
+    document.getElementById('recipientHeading').textContent = T.recipientHeading;
+    document.getElementById('detailsHeading').textContent = T.detailsHeading;
+    document.getElementById('helpLabel').textContent = T.needHelp;
+    document.getElementById('callLabel').textContent = T.callLabel;
+    document.getElementById('closeBtn').textContent = T.done;
+  }
+
+  function render() {
+    applyTranslations();
+
+    const amtFull = tx.am ? formatAmount(tx.am, tx.cur) : '—';
+    document.getElementById('creditedAmount').textContent = amtFull;
+
+    document.getElementById('reqRecipient').textContent = tx.rn || '—';
+    document.getElementById('fromName').textContent = tx.mk || 'Orange Money';
+    document.getElementById('supportNum').textContent = SUPPORT_NUMBERS[tx.c] || '—';
+
+    const rows = [
+      { k: T.purposeLabel,     v: tx.pu || '—',              cls: 'purpose-row' },
+      { k: T.kCountry,         v: tx.c || '—' },
+      { k: T.kPaymentMethod,   v: tx.pm || '—' },
+      { k: T.kService,         v: tx.sn || '—' },
+      { k: T.kReference,       v: tx.ref, mono: true },
+      { k: T.kTransactionDate, v: tx.dt ? formatDate(tx.dt) : formatDate() },
+      { k: T.kStatus,          v: T.vCredited, cls: 'status-done' }
+    ];
+
+    let html = '';
+    rows.forEach(r => {
+      let vcls = r.mono ? 'mono' : (r.cls || '');
+      html += `<div class="detail-row ${r.cls || ''}"><span class="k">${r.k}</span><span class="v ${vcls}">${r.v}</span></div>`;
+    });
+    document.getElementById('detailsPanel').innerHTML = html;
+  }
+
+  function copyReceipt() {
+    const amtFull = tx.am ? formatAmount(tx.am, tx.cur) : '—';
+    const lines = [
+      T.copyReceiptTitle,
+      '=====================================',
+      T.amountLabel ? (T.amountLabel + ': ' + amtFull) : ('Amount: ' + amtFull),
+      T.purposeLabel + ': ' + (tx.pu || '—'),
+      T.fromLabel + ': ' + (tx.mk || 'Orange Money'),
+      T.toLabel + ': ' + (tx.rn || '—'),
+      T.kCountry + ': ' + (tx.c || '—'),
+      T.kReference + ': ' + (tx.ref || '—'),
+      T.kPaymentMethod + ': ' + (tx.pm || '—'),
+      T.kService + ': ' + (tx.sn || '—'),
+      T.kTransactionDate + ': ' + formatDate(tx.dt),
+      T.kStatus + ': ' + T.vCredited
+    ].join('\n');
+
+    const btn = document.getElementById('copyBtn');
+    const lbl = document.getElementById('copyLbl');
+    const done = () => {
+      btn.classList.add('copied');
+      lbl.textContent = T.copied;
+      showToast(T.copyToast);
+      setTimeout(() => { btn.classList.remove('copied'); lbl.textContent = T.copyLbl; }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lines).then(done).catch(() => { fallbackCopy(lines); done(); });
+    } else { fallbackCopy(lines); done(); }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function closePage() {
+    if (history.length > 1) {
+      history.back();
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePage();
+  });
+
+  document.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>
